@@ -1,0 +1,4 @@
+Jacobi method results:
+Error: 0.000010
+Time: 11.358930
+Iterations: 3050

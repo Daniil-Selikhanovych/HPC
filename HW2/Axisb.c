@@ -3,7 +3,7 @@
 #include <omp.h>
 #include <time.h>
 
-double * vector_(int N, double add)
+double * vector(int N, double add)
 {
     double *x = (double *)malloc(N*sizeof(double));
     for (int i = 0; i < N; i++)
@@ -13,7 +13,7 @@ double * vector_(int N, double add)
     return x;
 }
 
-double ** matrix_(int N)
+double ** matrix(int N)
 {
     srand(time(NULL));
     double s;
@@ -65,7 +65,7 @@ void copy(double *x1, double *x2, int N)
 int main()
 {
     int N = 1000;
-    double e = 1e-5, sig;
+    double e = 1e-5, not_ii;
     double **A, *b, *x, *out;
 
     double start, end;
@@ -73,10 +73,10 @@ int main()
     int chunk = N/4;
     int j;
 
-    A = matrix_(N);
-    b = vector_(N, 1.);
-    x = vector_(N, 0.001);
-    out = vector_(N, 0.);
+    A = matrix(N);
+    b = vector(N, 1.);
+    x = vector(N, 0.001);
+    out = vector(N, 0.);
 
     int count = 0;
     start = omp_get_wtime();
@@ -85,24 +85,24 @@ int main()
         copy(out, x, N);
         for (int i = 0; i < N; i++)
         {
-            sig = 0;
-#pragma omp parallel for reduction(+: sig) \
+            not_ii = 0;
+            #pragma omp parallel for reduction(+: not_ii) \
                 schedule(dynamic, chunk) \
                 private(j)
             for (j = 0; j < N; j++)
             {
                 if (i != j)
                 {
-                    sig += A[i][j]*x[j];
+                    not_ii += A[i][j]*x[j];
                 }
             }
-            out[i] = 1./A[i][i]*(b[i] - sig);
+            out[i] = 1./A[i][i]*(b[i] - not_ii);
         }
         count++;
     }
     end = omp_get_wtime();
 
-    printf("Jacobi method ----------------\n");
+    printf("Jacobi method results:\n");
     printf("Error: %f\n", error_square(x, out, N));
     printf("Time: %f\n", (double)(end - start));
     printf("Iterations: %d\n", count);
