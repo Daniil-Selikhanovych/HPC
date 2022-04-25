@@ -1,0 +1,10 @@
+Process 0, send data to 1
+Process 1 received message process0
+Process 1, send data to 0
+Process 0 received message process0process1
+Process 0, send data to 1
+Process 1 received message process0process1process0
+Process 1, send data to 2
+Process 2 received message process0process1process0process0process1
+Process 2, send data to 1
+Process 1 received message process0process1process0process0process1process2
