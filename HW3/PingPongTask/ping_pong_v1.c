@@ -4,13 +4,7 @@
 #include <unistd.h>
 #include <string.h>
 
-char* concat_strings(char *s1, char *s2)
-{
-    char *res =(char *) malloc(strlen(s1) + strlen(s2) + 1);
-    strcpy(res, s1);
-    strcat(res, s2);
-    return res;
-}
+5
 
 int main(int argc, char ** argv)
 {

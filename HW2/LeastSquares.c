@@ -21,7 +21,7 @@ double ** create_matrix(double a, double b, int N)
 int main()
 {
     int N = 10000, n_steps = 10000;
-    double a = 3., b = 4.;
+    double a = 3., b = 45.;
     double a_g, b_g, a_n, b_n;
     
     a_n = rand() / RAND_MAX;
