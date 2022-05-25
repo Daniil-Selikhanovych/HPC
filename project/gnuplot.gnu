@@ -12,5 +12,5 @@ set title sprintf("potential energy = %f, kinetic energy = %f", a, b)
 plot 'core_logs.log' using 1:2 title 'potential' with lines, \
 	'core_logs.log' using 1:3 title 'kinetic' with lines, \
 	'core_logs.log' using 1:4 title 'full energy' with lines lw 2, \
-	f(x) title 'aproximation of potential energy' lw 2, \
-	g(x) title 'aproximation of kinetic energy' lw 2
+	f(x) title 'approximation of potential energy' lw 2, \
+	g(x) title 'approximation of kinetic energy' lw 2
