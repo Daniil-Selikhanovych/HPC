@@ -16,8 +16,8 @@
 int main(void)
 {
 	double T = 1.38;
-	double ro = 0.6;
-	int steps = 200000;
+	double ro = 1.0;
+	int steps = 100000;
 	bool enable_thermostat = true;
 
 	double walls_size = 6; // Box size
@@ -26,13 +26,9 @@ int main(void)
 	double correlation = 0.1;
 
     #if defined(PARALLEL)
-        int num_threads = 3;
+        int num_threads = 8;
         omp_set_num_threads(num_threads);
-        std::cout << "Use OpenMP";
-        #pragma omp parallel
-        {
-            std::cout << "\nnum threads = " << omp_get_num_threads();
-        }
+        std::cout << "Use OpenMP with num threads = " << num_threads << std::endl;;
     #else
         std::cout << "Not use OpenMP" << std::endl;
     #endif
@@ -50,6 +46,8 @@ int main(void)
     double potential_energy, kinetic_energy;
     bool __cur_thermostat = enable_thermostat;
     int ps = 0, ps_old = 0;
+    clock_t start, end;
+    start = omp_get_wtime();
     for (int step = 0; step < steps; step++)
 	{
 		B.move();
@@ -80,8 +78,14 @@ int main(void)
 		}
 	}
 	std::cout << "\nCompleted!" << std::endl;
+    end = omp_get_wtime();
+    printf("Computation time: %.1f seconds.\n", (double)(end - start));
 
 	log.close();
+
+    log.open("core_logs_runtime.log",  std::ios_base::app | std::ios::out);
+    log << "Computation time: " << (double)(end - start) << " seconds.\n";
+    log.close();
 
     return 0;
 }

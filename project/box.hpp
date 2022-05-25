@@ -37,7 +37,6 @@ public:
     virtual double calc_v();
 	virtual void init_leapfrog();
 	virtual void dump();
-	virtual void clear_dublicates();
 	void themperature_balance();
 };
 
@@ -114,18 +113,6 @@ void Box::dump()
     for (auto & particle: *this)
 		std::cout << particle << std::endl;
 	std::cout << std::endl;
-}
-
-void Box::clear_dublicates()
-{
-	for (size_t i = 0; i < size() - 1; i++)
-		for (size_t j = i + 1; j < size(); j++) {
-			vector3d rr = (*this)[i].r - (*this)[j].r;
-			if (rr.length_sqr() < 0.2) {
-				(*this)[j] = (*this)[size() - 1];
-				resize(size() - 1);
-			}
-		}
 }
 
 void Box::themperature_balance()

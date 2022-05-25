@@ -19,7 +19,6 @@ public:
 
     virtual double calc_forces();
     virtual void move();
-	virtual void clear_dublicates();
 	virtual void generate_crystal(double ro);
 	virtual void generate_random_crystal(double ro, double correlation);
 };
@@ -42,8 +41,6 @@ double PeriodicBox::calc_forces()
 			rr.balance(walls_size);
 
 			double dist2 = rr.length_sqr();
-			if (dist2 >= 9)
-				continue;
 
 			rr *= 4 * (6.0 / fast_pow(dist2, 4) - 12.0 / fast_pow(dist2, 7));
 			#if defined(PARALLEL)
@@ -78,18 +75,11 @@ inline void PeriodicBox::move()
 	#endif
 }
 
-void PeriodicBox::clear_dublicates()
-{
-	for (size_t i = 0; i < size() - 1; i++)
-		for (size_t j = i + 1; j < size(); j++) {
-			vector3d rr = (*this)[i].r - (*this)[j].r;
-			rr.balance(walls_size);
-		}
-}
-
 void PeriodicBox::generate_crystal(double ro)
 {
 	int count = walls_size * walls_size * walls_size * ro;
+    std::cout << "Number of particles = " << count << std::endl;
+
 	int cube = 1;
 	while (cube * cube * cube < count) cube++;
     double dist = walls_size / cube;
