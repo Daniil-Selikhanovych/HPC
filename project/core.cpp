@@ -22,7 +22,7 @@ int main(void)
 
 	double walls_size = 6; // Box size
 	double delta_time = 0.001;
-	double delta_themperature = 0.0001;
+	double delta_temperature = 0.0001;
 	double correlation = 0.1;
 
     #if defined(PARALLEL)
@@ -38,7 +38,7 @@ int main(void)
 	std::fstream log;
 	log.open("core_logs.log", std::ios::out);
 
-    PeriodicBox B(walls_size, delta_time, T, 4 * delta_themperature);
+    PeriodicBox B(walls_size, delta_time, T, 4 * delta_temperature);
     B.generate_random_crystal(ro, correlation);
     B.clear_forces();
     B.init_leapfrog();
@@ -56,11 +56,11 @@ int main(void)
 
         if (__cur_thermostat)
 		{
-			B.themperature_balance();
+			B.temperature_balance();
 			if (step * 8 == steps)
-				B.delta_themperature = 2 * delta_themperature;
+				B.delta_temperature = 2 * delta_temperature;
 			if (step * 4 == steps)
-				B.delta_themperature = delta_themperature;
+				B.delta_temperature = delta_temperature;
 			if (step * 2 == steps)
 				__cur_thermostat = false;
 		}

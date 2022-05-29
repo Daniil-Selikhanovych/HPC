@@ -14,7 +14,7 @@ class Box : public std::vector< Particle >
 {
 public:
     double dt;
-	double themperature, default_themperature, delta_themperature;
+	double temperature, default_temperature, delta_t    emperature;
 
 public:
     static constexpr inline double fast_pow(double x, int n)
@@ -28,8 +28,8 @@ public:
     }
 
     Box (double dt) : dt(dt) {}
-    Box (double dt, double default_themperature, double delta_themperature) :
-				dt(dt), default_themperature(default_themperature), delta_themperature(delta_themperature) {};
+    Box (double dt, double default_temperature, double delta_temperature) :
+				dt(dt), default_temperature(default_temperature), delta_temperature(delta_temperature) {};
 
     virtual void clear_forces();
     virtual double calc_forces();
@@ -37,7 +37,7 @@ public:
     virtual double calc_v();
 	virtual void init_leapfrog();
 	virtual void dump();
-	void themperature_balance();
+	void temperature_balance();
 };
 
 void Box::clear_forces()
@@ -88,7 +88,7 @@ double Box::calc_v()
 	}
 	#endif
 
-	themperature = kinetic_energy / size(); //!TODO Boltsman constant
+	temperature = kinetic_energy / size();
 	return kinetic_energy;
 }
 void Box::init_leapfrog()
@@ -115,14 +115,14 @@ void Box::dump()
 	std::cout << std::endl;
 }
 
-void Box::themperature_balance()
+void Box::temperature_balance()
 {
-    if (themperature == 0) {
+    if (temperature == 0) {
 		for (auto & particle: *this)
-			themperature += particle.v.length_sqr() * particle.mass / 2;
-		themperature /= size();
+			temperature += particle.v.length_sqr() * particle.mass / 2;
+		temperature /= size();
 	}
-    double lambda = sqrt(1 + delta_themperature * (default_themperature/themperature - 1));
+    double lambda = sqrt(1 + delta_temperature * (default_temperature/temperature - 1));
 	for (auto & particle: *this)
         particle.v *= lambda;
 }

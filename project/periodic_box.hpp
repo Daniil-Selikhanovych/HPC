@@ -59,16 +59,12 @@ inline void PeriodicBox::move()
 {
 	#if !defined(PARALLEL)
 	for (auto & particle: *this) {
-        // std::cout << "Not use OpenMP \n" << std::endl;
 		particle.move(dt);
 		particle.r.balance(walls_size);
 	}
     #else
 	#pragma omp parallel for schedule(static)
 	for (size_t i = 0; i < size(); i++) {
-        // std::cout << "Use OpenMP \n" << std::endl;
-        // int num_used_threads = omp_get_num_threads();
-        // std::cout << "Use OpenMP with " << num_used_threads << " threads\n" << std::endl;
 		(*this)[i].move(dt);
         (*this)[i].r.balance(walls_size);
 	}
