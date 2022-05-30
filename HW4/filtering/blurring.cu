@@ -27,14 +27,14 @@ void filter(int height, int width, double *ker, double *d_img, double *d_img_res
         else
         {
             d_img_res[j*width*3 + i*3 + ch] =  (d_img[j*width*3 + i*3 + ch]*ker[4] + \
-                                                    d_img[(j + 1) *width * 3 + (i - 1) * 3 + ch]*ker[0] + \
-                                                    d_img[(j + 1) *width * 3 + (i + 1) * 3 + ch]*ker[8] + \
-                                                    d_img[(j - 1) *width * 3 + (i - 1) * 3 + ch]*ker[6] + \
-                                                    d_img[(j - 1) *width * 3 + (i + 1) * 3 + ch]*ker[2] + \
-                                                    d_img[(j + 1) *width * 3 + i * 3 + ch]*ker[3] + \
-                                                    d_img[j *width * 3 + (i - 1) * 3 + ch]*ker[1] + \
-                                                    d_img[(j - 1) *width * 3 + i * 3 + ch]*ker[5] + \
-                                                    d_img[j * width * 3 + (i + 1)*3 + ch]*ker[7]); 
+                                                d_img[(j + 1) *width * 3 + (i - 1) * 3 + ch]*ker[0] + \
+                                                d_img[(j + 1) *width * 3 + (i + 1) * 3 + ch]*ker[8] + \
+                                                d_img[(j - 1) *width * 3 + (i - 1) * 3 + ch]*ker[6] + \
+                                                d_img[(j - 1) *width * 3 + (i + 1) * 3 + ch]*ker[2] + \
+                                                d_img[(j + 1) *width * 3 + i * 3 + ch]*ker[3] + \
+                                                d_img[j *width * 3 + (i - 1) * 3 + ch]*ker[1] + \
+                                                d_img[(j - 1) *width * 3 + i * 3 + ch]*ker[5] + \
+                                                d_img[j * width * 3 + (i + 1)*3 + ch]*ker[7]);
         }
         if (d_img_res[j*width*3 +i*3 + ch] < 0)
         {
@@ -100,9 +100,11 @@ int main(int argc, char **argv)
     double *h_buf_res = (double *)malloc(sizeof(double) * size);
     cudaMemcpy(h_buf_res, d_img_res, sizeof(double) * size, cudaMemcpyDeviceToHost);
     for (int i = 0; i < size; i++)
-        {
-                h_img[i] = uint8_t (h_buf_res[i]);
-        }
-    stbi_write_png("filtered_corgi.jpg", width, height, 3, h_img, width * 3);
+    {
+            h_img[i] = uint8_t (h_buf_res[i]);
+    }
+    char* output_name = strcat(ker_name, "_corgi.jpg");
+    stbi_write_png(output_name,
+                   width, height, 3, h_img, width * 3);
     return 0;
 }
